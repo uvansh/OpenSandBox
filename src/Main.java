@@ -42,13 +42,13 @@ public class Main{
     }
     private static void addBook(Connection connection,Scanner sc) {
         try{
-            System.out.print("Enter book title: ");
+            System.out.println("Enter book title: ");
             String title = sc.nextLine();
-            System.out.print("Enter book author: ");
+            System.out.println("Enter book author: ");
             String author = sc.nextLine();
-            System.out.print("Enter published year: ");
+            System.out.println("Enter published year: ");
             int year = Integer.parseInt(sc.nextLine().trim());
-            System.out.print("Enter genre: ");
+            System.out.println("Enter genre: ");
             String genre = sc.nextLine();
 
             String sql = "INSERT INTO books (title,author,published_year,genre) VALUES (?,?,?,?)";
@@ -86,14 +86,18 @@ public class Main{
     private static void updateBooks(Connection connection,Scanner sc){
         try{
             System.out.print("Enter the ID of the book to update: ");
-            int id = Integer.parseInt(sc.nextLine().trim());
-            System.out.print("Enter new title: ");
+            int id = sc.nextInt();
+
+            System.out.println("Enter new title: ");
             String title = sc.nextLine();
-            System.out.print("Enter new author: ");
+
+            System.out.println("Enter new author: ");
             String author = sc.nextLine();
-            System.out.print("Enter new published year: ");
+
+            System.out.println("Enter new published year: ");
             int year = Integer.parseInt(sc.nextLine().trim());
-            System.out.print("Enter new genre: ");
+
+            System.out.println("Enter new genre: ");
             String genre = sc.nextLine();
 
             String sql = "UPDATE books SET title=?,author=?,published_year=?,genre=? WHERE id=?";
@@ -103,6 +107,7 @@ public class Main{
             statement.setInt(3,year);
             statement.setString(4,genre);
             statement.setInt(5,id);
+
             int rowsUpdated = statement.executeUpdate();
             if(rowsUpdated>0){
                 System.out.println("Books updated successfully!");
