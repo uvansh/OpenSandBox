@@ -45,14 +45,18 @@ public class Main{
     private static void addBook(Connection connection,Scanner sc) {
         try{
             System.out.println("Enter book title: ");
-            String title = sc.next();
+            if (sc.hasNextLine()) sc.nextLine(); // Clear the leftover newline
+            String title = sc.nextLine();
+
             System.out.println("Enter book author: ");
-            String author = sc.next();
+            String author = sc.nextLine();
+
+            System.out.println("Enter genre: ");
+            String genre = sc.nextLine();
+
             System.out.println("Enter published year: ");
             int year = sc.nextInt();
 
-            System.out.println("Enter genre: ");
-            String genre = sc.next();
 
             String sql = "INSERT INTO books (title,author,published_year,genre) VALUES (?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -73,14 +77,16 @@ public class Main{
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(sql);
 
-            System.out.println("\nBooks in the Library: ");
+            System.out.println("\nBooks in the Library: \n");
+                System.out.printf("%-5s %-25s %-15s %-6s %-20s\n","ID", "Title", "Author",  "Year", "Genre");
+            System.out.println("---------------------------------------------------------------");
             while(resultSet.next()){
-                System.out.printf("ID: %d,Title: %s, Author: %s, Year: %d, Genre: %s%n",
-                    resultSet.getInt("id"),
-                    resultSet.getString("title"),
-                    resultSet.getString("author"),
-                    resultSet.getInt("published_year"),
-                    resultSet.getString("genre"));
+                int id = resultSet.getInt("id");
+                String title = resultSet.getString("title");
+                String author = resultSet.getString("author");
+                int published_year = resultSet.getInt("published_year");
+                String genre = resultSet.getString("genre");
+                System.out.printf("%-5d %-25s %-15s %-6d %-20s\n",id,title,author,published_year,genre);
             }
         } catch (SQLException e){
             System.out.println("Error connecting to database: "+e.getMessage());
@@ -89,19 +95,20 @@ public class Main{
     private static void updateBooks(Connection connection,Scanner sc){
         try{
             System.out.print("Enter the ID of the book to update: ");
+            if (sc.hasNextLine()) sc.nextLine(); // Clear the leftover newline
             int id = sc.nextInt();
 
             System.out.println("Enter new title: ");
-            String title = sc.next();
+            String title = sc.nextLine();
 
             System.out.println("Enter new author: ");
-            String author = sc.next();
+            String author = sc.nextLine();
 
             System.out.println("Enter new published year: ");
             int year = sc.nextInt();
 
             System.out.println("Enter new genre: ");
-            String genre = sc.next();
+            String genre = sc.nextLine();
 
             String sql = "UPDATE books SET title=?,author=?,published_year=?,genre=? WHERE id=?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -144,6 +151,7 @@ public class Main{
     private static void searchBook(Connection connection,Scanner sc){
         try{
             System.out.println("Enter keyword to search (title/author): ");
+            if (sc.hasNextLine()) sc.nextLine(); // Clear the leftover newline
             String keyword = sc.nextLine();
 
             String sql = "SELECT * FROM books WHERE title ILIKE ? OR author ILIKE ?";
