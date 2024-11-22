@@ -17,19 +17,21 @@ public class Main{
             while (true){
                 System.out.println("\nLibrary Management System:");
                 System.out.println("1.Add Book");
-                System.out.println("2.View All Books");
-                System.out.println("3.Update Book");
-                System.out.println("4.Delete Book");
-                System.out.println("5.Exit");
+                System.out.println("2. Search Book");
+                System.out.println("3.View All Books");
+                System.out.println("4.Update Book");
+                System.out.println("5.Delete Book");
+                System.out.println("6.Exit");
                 System.out.println("Choose an Option: ");
                 int choice = sc.nextInt();
 
                 switch(choice){
                     case 1 -> addBook(connection,sc);
-                    case 2 -> viewBooks(connection);
-                    case 3 -> updateBooks(connection,sc);
-                    case 4 -> deleteBook(connection,sc);
-                    case 5 -> {
+                    case 2 -> searchBook(connection,sc);
+                    case 3 -> viewBooks(connection);
+                    case 4 -> updateBooks(connection,sc);
+                    case 5 -> deleteBook(connection,sc);
+                    case 6 -> {
                         System.out.println("Exiting...");
                         return;
                     }
@@ -139,7 +141,7 @@ public class Main{
             System.out.println("Error connecting to database: "+e.getMessage());
         }
     }
-    private static void BookSearch(Connection connection,Scanner sc){
+    private static void searchBook(Connection connection,Scanner sc){
         try{
             System.out.println("Enter keyword to search (title/author): ");
             String keyword = sc.nextLine();
