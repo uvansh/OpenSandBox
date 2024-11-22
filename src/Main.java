@@ -37,19 +37,20 @@ public class Main{
                 }
             }
         } catch(SQLException e){
-            e.printStackTrace();
+            System.out.println("Error connecting to database: "+e.getMessage());
         }
     }
     private static void addBook(Connection connection,Scanner sc) {
         try{
             System.out.println("Enter book title: ");
-            String title = sc.nextLine();
+            String title = sc.next();
             System.out.println("Enter book author: ");
-            String author = sc.nextLine();
+            String author = sc.next();
             System.out.println("Enter published year: ");
-            int year = Integer.parseInt(sc.nextLine().trim());
+            int year = sc.nextInt();
+
             System.out.println("Enter genre: ");
-            String genre = sc.nextLine();
+            String genre = sc.next();
 
             String sql = "INSERT INTO books (title,author,published_year,genre) VALUES (?,?,?,?)";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -61,7 +62,7 @@ public class Main{
 
             System.out.println("Book added successfully!");
         } catch(SQLException e){
-            e.printStackTrace();
+            System.out.println("Error connecting to database: "+e.getMessage());
         }
     }
     private static void viewBooks(Connection connection){
@@ -80,7 +81,7 @@ public class Main{
                     resultSet.getString("genre"));
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Error connecting to database: "+e.getMessage());
         }
     }
     private static void updateBooks(Connection connection,Scanner sc){
@@ -89,16 +90,16 @@ public class Main{
             int id = sc.nextInt();
 
             System.out.println("Enter new title: ");
-            String title = sc.nextLine();
+            String title = sc.next();
 
             System.out.println("Enter new author: ");
-            String author = sc.nextLine();
+            String author = sc.next();
 
             System.out.println("Enter new published year: ");
-            int year = Integer.parseInt(sc.nextLine().trim());
+            int year = sc.nextInt();
 
             System.out.println("Enter new genre: ");
-            String genre = sc.nextLine();
+            String genre = sc.next();
 
             String sql = "UPDATE books SET title=?,author=?,published_year=?,genre=? WHERE id=?";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -116,7 +117,7 @@ public class Main{
                 System.out.println("Book with the given ID not found.");
             }
         } catch (SQLException e){
-            e.printStackTrace();
+            System.out.println("Error connecting to database: "+e.getMessage());
         }
     }
     private static void deleteBook(Connection connection,Scanner sc){
@@ -135,7 +136,29 @@ public class Main{
                 System.out.println("Book with the given ID is not found.");
             }
         } catch(SQLException e){
-            e.printStackTrace();
+            System.out.println("Error connecting to database: "+e.getMessage());
+        }
+    }
+    private static void BookSearch(Connection connection,Scanner sc){
+        try{
+            System.out.println("Enter keyword to search (title/author): ");
+            String keyword = sc.nextLine();
+
+            String sql = "SELECT * FROM books WHERE title ILIKE ? OR author ILIKE ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1,"%"+keyword+"%");
+            statement.setString(2,"%"+keyword+"%");
+            ResultSet resultSet = statement.executeQuery();
+
+            System.out.println("Search Result: ");
+            while (resultSet.next()){
+                System.out.println("ID: "+resultSet.getInt("id"));
+                System.out.println("Title: "+resultSet.getString("title"));
+                System.out.println("Author: "+resultSet.getString("author"));
+                System.out.println("----------------------------------------");
+            }
+        } catch(SQLException e){
+            System.out.println("Error connecting to database: "+e.getMessage());
         }
     }
 }
